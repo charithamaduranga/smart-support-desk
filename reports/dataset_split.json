@@ -1,0 +1,262 @@
+{
+  "dataset": {
+    "repo": "bitext/Bitext-customer-support-llm-chatbot-training-dataset",
+    "revision": "430d1a89bd93bd1fa23c16f29dd53e73f0087443",
+    "file": "Bitext_Sample_Customer_Support_Training_Dataset_27K_responses-v11.csv",
+    "sha256": "6f81102b0100b97b8468eb04368033a23206bf1fde9d53500d5806ec1001a434"
+  },
+  "rows_raw": 26872,
+  "rows_after_dedup": 23826,
+  "duplicates_removed": 3046,
+  "near_dup_threshold": 0.9,
+  "n_groups": 21192,
+  "singleton_groups": 19516,
+  "largest_group_sizes": [
+    20,
+    16,
+    12,
+    12,
+    12,
+    11,
+    9,
+    9,
+    9,
+    9
+  ],
+  "groups_spanning_multiple_categories": 0,
+  "split": {
+    "method": "StratifiedGroupKFold(n_splits=5, shuffle=True, random_state=42), fold 0 = test",
+    "train_rows": 19061,
+    "test_rows": 4765,
+    "train_groups": 16954,
+    "test_groups": 4238,
+    "groups_crossing_boundary": 0
+  },
+  "test_to_train_nn_similarity": {
+    "share_ge_0.9": 0.0,
+    "share_ge_0.8": 0.345,
+    "median": 0.7533
+  },
+  "class_distribution": {
+    "overall": {
+      "ACCOUNT": {
+        "n": 5076,
+        "pct": 21.3
+      },
+      "ORDER": {
+        "n": 3016,
+        "pct": 12.66
+      },
+      "REFUND": {
+        "n": 2559,
+        "pct": 10.74
+      },
+      "FEEDBACK": {
+        "n": 1989,
+        "pct": 8.35
+      },
+      "PAYMENT": {
+        "n": 1980,
+        "pct": 8.31
+      },
+      "SHIPPING": {
+        "n": 1948,
+        "pct": 8.18
+      },
+      "CONTACT": {
+        "n": 1944,
+        "pct": 8.16
+      },
+      "INVOICE": {
+        "n": 1785,
+        "pct": 7.49
+      },
+      "DELIVERY": {
+        "n": 1618,
+        "pct": 6.79
+      },
+      "SUBSCRIPTION": {
+        "n": 982,
+        "pct": 4.12
+      },
+      "CANCEL": {
+        "n": 929,
+        "pct": 3.9
+      }
+    },
+    "train": {
+      "ACCOUNT": {
+        "n": 4061,
+        "pct": 21.31
+      },
+      "ORDER": {
+        "n": 2413,
+        "pct": 12.66
+      },
+      "REFUND": {
+        "n": 2047,
+        "pct": 10.74
+      },
+      "FEEDBACK": {
+        "n": 1591,
+        "pct": 8.35
+      },
+      "PAYMENT": {
+        "n": 1584,
+        "pct": 8.31
+      },
+      "SHIPPING": {
+        "n": 1558,
+        "pct": 8.17
+      },
+      "CONTACT": {
+        "n": 1555,
+        "pct": 8.16
+      },
+      "INVOICE": {
+        "n": 1428,
+        "pct": 7.49
+      },
+      "DELIVERY": {
+        "n": 1295,
+        "pct": 6.79
+      },
+      "SUBSCRIPTION": {
+        "n": 786,
+        "pct": 4.12
+      },
+      "CANCEL": {
+        "n": 743,
+        "pct": 3.9
+      }
+    },
+    "test": {
+      "ACCOUNT": {
+        "n": 1015,
+        "pct": 21.3
+      },
+      "ORDER": {
+        "n": 603,
+        "pct": 12.65
+      },
+      "REFUND": {
+        "n": 512,
+        "pct": 10.75
+      },
+      "FEEDBACK": {
+        "n": 398,
+        "pct": 8.35
+      },
+      "PAYMENT": {
+        "n": 396,
+        "pct": 8.31
+      },
+      "SHIPPING": {
+        "n": 390,
+        "pct": 8.18
+      },
+      "CONTACT": {
+        "n": 389,
+        "pct": 8.16
+      },
+      "INVOICE": {
+        "n": 357,
+        "pct": 7.49
+      },
+      "DELIVERY": {
+        "n": 323,
+        "pct": 6.78
+      },
+      "SUBSCRIPTION": {
+        "n": 196,
+        "pct": 4.11
+      },
+      "CANCEL": {
+        "n": 186,
+        "pct": 3.9
+      }
+    }
+  },
+  "largest_groups_chaining_check": [
+    {
+      "group": 6218,
+      "size": 20,
+      "categories": [
+        "CONTACT"
+      ],
+      "intents": [
+        "contact_customer_service"
+      ],
+      "min_pairwise_cos": 0.752,
+      "mean_pairwise_cos": 0.844,
+      "least_similar_pair": [
+        "wanna see at what time i can reach customer support",
+        "where can i see at what time i can reach customer assistance"
+      ]
+    },
+    {
+      "group": 6216,
+      "size": 16,
+      "categories": [
+        "CONTACT"
+      ],
+      "intents": [
+        "contact_customer_service"
+      ],
+      "min_pairwise_cos": 0.737,
+      "mean_pairwise_cos": 0.848,
+      "least_similar_pair": [
+        "how do I check at what time I can call customer support?",
+        "where can I check at what time I can call customer service?"
+      ]
+    },
+    {
+      "group": 4579,
+      "size": 12,
+      "categories": [
+        "REFUND"
+      ],
+      "intents": [
+        "check_refund_policy"
+      ],
+      "min_pairwise_cos": 0.78,
+      "mean_pairwise_cos": 0.878,
+      "least_similar_pair": [
+        "could I check in which cases can I ask to be reimbursed?",
+        "I have got to see in which cases can I ask to be reimbursed"
+      ]
+    },
+    {
+      "group": 20001,
+      "size": 12,
+      "categories": [
+        "ORDER"
+      ],
+      "intents": [
+        "track_order"
+      ],
+      "min_pairwise_cos": 0.783,
+      "mean_pairwise_cos": 0.867,
+      "least_similar_pair": [
+        "i need assistance to check the eta of the order {{Order Number}}",
+        "where can i check the ETA of the order {{Order Number}}"
+      ]
+    },
+    {
+      "group": 20110,
+      "size": 12,
+      "categories": [
+        "ORDER"
+      ],
+      "intents": [
+        "track_order"
+      ],
+      "min_pairwise_cos": 0.81,
+      "mean_pairwise_cos": 0.876,
+      "least_similar_pair": [
+        "help me  see the eta of the purchase {{Order Number}}",
+        "need assistance to see the ETA of the purchase {{Order Number}}"
+      ]
+    }
+  ]
+}

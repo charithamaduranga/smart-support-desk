@@ -1,0 +1,32 @@
+{
+  "trained_at": "2026-11-25T07:43:32+00:00",
+  "dataset_revision": "430d1a89bd93bd1fa23c16f29dd53e73f0087443",
+  "train_rows": 19061,
+  "labels": [
+    "ACCOUNT",
+    "CANCEL",
+    "CONTACT",
+    "DELIVERY",
+    "FEEDBACK",
+    "INVOICE",
+    "ORDER",
+    "PAYMENT",
+    "REFUND",
+    "SHIPPING",
+    "SUBSCRIPTION"
+  ],
+  "sklearn_version": "1.9.1",
+  "params": {
+    "C": 10.0,
+    "class_weight": "balanced",
+    "word_ngrams": [
+      1,
+      2
+    ],
+    "char_wb_ngrams": [
+      2,
+      5
+    ],
+    "min_df": 2
+  }
+}

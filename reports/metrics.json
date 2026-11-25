@@ -1,0 +1,735 @@
+{
+  "grouped_test": {
+    "n": 4765,
+    "accuracy": 0.9996,
+    "macro_f1": 0.9995,
+    "weighted_f1": 0.9996,
+    "per_class": {
+      "ACCOUNT": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 1015.0
+      },
+      "CANCEL": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 186.0
+      },
+      "CONTACT": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 389.0
+      },
+      "DELIVERY": {
+        "precision": 0.9969,
+        "recall": 0.9969,
+        "f1-score": 0.9969,
+        "support": 323.0
+      },
+      "FEEDBACK": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 398.0
+      },
+      "INVOICE": {
+        "precision": 0.9972,
+        "recall": 1.0,
+        "f1-score": 0.9986,
+        "support": 357.0
+      },
+      "ORDER": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 603.0
+      },
+      "PAYMENT": {
+        "precision": 1.0,
+        "recall": 0.9975,
+        "f1-score": 0.9987,
+        "support": 396.0
+      },
+      "REFUND": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 512.0
+      },
+      "SHIPPING": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 390.0
+      },
+      "SUBSCRIPTION": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 196.0
+      }
+    },
+    "confusion_matrix": {
+      "labels": [
+        "ACCOUNT",
+        "CANCEL",
+        "CONTACT",
+        "DELIVERY",
+        "FEEDBACK",
+        "INVOICE",
+        "ORDER",
+        "PAYMENT",
+        "REFUND",
+        "SHIPPING",
+        "SUBSCRIPTION"
+      ],
+      "matrix": [
+        [
+          1015,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          186,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          389,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          322,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          398,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          357,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          603,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          395,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          512,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          390,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          196
+        ]
+      ]
+    },
+    "n_errors": 2
+  },
+  "custom_messages": {
+    "n": 20,
+    "file_sha256": "bae1b87d04d46b40156bd3158846dde345552d37c6a515c6b58703e2bdb2d93f",
+    "n_with_accepted_alternatives": 7,
+    "strict_accuracy": 0.8,
+    "lenient_accuracy": 0.85,
+    "note": "strict = expected label only; lenient = expected or a listed acceptable alternative",
+    "predictions": [
+      {
+        "text": "hey my order #48213 still hasnt shipped, its been 9 days?? whats going on",
+        "expected": "ORDER",
+        "acceptable": "DELIVERY",
+        "predicted": "DELIVERY",
+        "confidence": 0.597,
+        "top3": [
+          [
+            "DELIVERY",
+            0.597
+          ],
+          [
+            "ORDER",
+            0.231
+          ],
+          [
+            "ACCOUNT",
+            0.052
+          ]
+        ],
+        "strict_correct": false,
+        "lenient_correct": true,
+        "note": "ambiguous: order status vs delivery time; Bitext labels 'where is my order' as track_order (ORDER)"
+      },
+      {
+        "text": "I was charged twice for the same purchase on my visa. Please fix this asap",
+        "expected": "PAYMENT",
+        "acceptable": "REFUND",
+        "predicted": "ORDER",
+        "confidence": 0.401,
+        "top3": [
+          [
+            "ORDER",
+            0.401
+          ],
+          [
+            "REFUND",
+            0.17
+          ],
+          [
+            "CANCEL",
+            0.106
+          ]
+        ],
+        "strict_correct": false,
+        "lenient_correct": false,
+        "note": "ambiguous: payment issue that implies a refund"
+      },
+      {
+        "text": "cant log in, forgot my pasword and the reset email never arrives",
+        "expected": "ACCOUNT",
+        "acceptable": "",
+        "predicted": "ACCOUNT",
+        "confidence": 0.833,
+        "top3": [
+          [
+            "ACCOUNT",
+            0.833
+          ],
+          [
+            "DELIVERY",
+            0.052
+          ],
+          [
+            "REFUND",
+            0.029
+          ]
+        ],
+        "strict_correct": true,
+        "lenient_correct": true,
+        "note": "typos; recover_password"
+      },
+      {
+        "text": "how much does it cost if i cancel my plan early",
+        "expected": "CANCEL",
+        "acceptable": "",
+        "predicted": "CANCEL",
+        "confidence": 0.544,
+        "top3": [
+          [
+            "CANCEL",
+            0.544
+          ],
+          [
+            "ACCOUNT",
+            0.17
+          ],
+          [
+            "ORDER",
+            0.09
+          ]
+        ],
+        "strict_correct": true,
+        "lenient_correct": true,
+        "note": "cancellation fee"
+      },
+      {
+        "text": "pls stop sending me promo emails, unsubscribe me",
+        "expected": "SUBSCRIPTION",
+        "acceptable": "",
+        "predicted": "SUBSCRIPTION",
+        "confidence": 0.295,
+        "top3": [
+          [
+            "SUBSCRIPTION",
+            0.295
+          ],
+          [
+            "FEEDBACK",
+            0.224
+          ],
+          [
+            "ACCOUNT",
+            0.15
+          ]
+        ],
+        "strict_correct": true,
+        "lenient_correct": true,
+        "note": "informal; newsletter"
+      },
+      {
+        "text": "I moved last week and need to update the address for future deliveries",
+        "expected": "SHIPPING",
+        "acceptable": "ACCOUNT",
+        "predicted": "SHIPPING",
+        "confidence": 0.984,
+        "top3": [
+          [
+            "SHIPPING",
+            0.984
+          ],
+          [
+            "ORDER",
+            0.003
+          ],
+          [
+            "REFUND",
+            0.003
+          ]
+        ],
+        "strict_correct": true,
+        "lenient_correct": true,
+        "note": "ambiguous: shipping address vs account details"
+      },
+      {
+        "text": "Your courier left my parcel in the rain and the box was soaked. Terrible service.",
+        "expected": "FEEDBACK",
+        "acceptable": "DELIVERY",
+        "predicted": "FEEDBACK",
+        "confidence": 0.381,
+        "top3": [
+          [
+            "FEEDBACK",
+            0.381
+          ],
+          [
+            "REFUND",
+            0.137
+          ],
+          [
+            "ACCOUNT",
+            0.116
+          ]
+        ],
+        "strict_correct": true,
+        "lenient_correct": true,
+        "note": "complaint mentioning delivery"
+      },
+      {
+        "text": "can i get a copy of the invoice for order 99120? need it for my expense report",
+        "expected": "INVOICE",
+        "acceptable": "",
+        "predicted": "INVOICE",
+        "confidence": 0.622,
+        "top3": [
+          [
+            "INVOICE",
+            0.622
+          ],
+          [
+            "ACCOUNT",
+            0.111
+          ],
+          [
+            "REFUND",
+            0.085
+          ]
+        ],
+        "strict_correct": true,
+        "lenient_correct": true,
+        "note": "real number instead of placeholder"
+      },
+      {
+        "text": "do you guys ship to Canada and how long does it usually take",
+        "expected": "DELIVERY",
+        "acceptable": "",
+        "predicted": "DELIVERY",
+        "confidence": 0.846,
+        "top3": [
+          [
+            "DELIVERY",
+            0.846
+          ],
+          [
+            "REFUND",
+            0.064
+          ],
+          [
+            "CONTACT",
+            0.017
+          ]
+        ],
+        "strict_correct": true,
+        "lenient_correct": true,
+        "note": "delivery options/period"
+      },
+      {
+        "text": "i returned the shoes 2 weeks ago, where is my money",
+        "expected": "REFUND",
+        "acceptable": "",
+        "predicted": "REFUND",
+        "confidence": 0.783,
+        "top3": [
+          [
+            "REFUND",
+            0.783
+          ],
+          [
+            "ACCOUNT",
+            0.072
+          ],
+          [
+            "INVOICE",
+            0.029
+          ]
+        ],
+        "strict_correct": true,
+        "lenient_correct": true,
+        "note": "track_refund without the word refund"
+      },
+      {
+        "text": "I want to talk to a real person not a bot",
+        "expected": "CONTACT",
+        "acceptable": "",
+        "predicted": "CONTACT",
+        "confidence": 0.994,
+        "top3": [
+          [
+            "CONTACT",
+            0.994
+          ],
+          [
+            "ACCOUNT",
+            0.002
+          ],
+          [
+            "FEEDBACK",
+            0.001
+          ]
+        ],
+        "strict_correct": true,
+        "lenient_correct": true,
+        "note": "human agent"
+      },
+      {
+        "text": "accidentally ordered the wrong size, can I swap it before it ships?",
+        "expected": "ORDER",
+        "acceptable": "",
+        "predicted": "ORDER",
+        "confidence": 0.379,
+        "top3": [
+          [
+            "ORDER",
+            0.379
+          ],
+          [
+            "DELIVERY",
+            0.171
+          ],
+          [
+            "ACCOUNT",
+            0.149
+          ]
+        ],
+        "strict_correct": true,
+        "lenient_correct": true,
+        "note": "change_order phrased as swap"
+      },
+      {
+        "text": "do u take paypal or apple pay",
+        "expected": "PAYMENT",
+        "acceptable": "",
+        "predicted": "PAYMENT",
+        "confidence": 0.718,
+        "top3": [
+          [
+            "PAYMENT",
+            0.718
+          ],
+          [
+            "ORDER",
+            0.1
+          ],
+          [
+            "REFUND",
+            0.043
+          ]
+        ],
+        "strict_correct": true,
+        "lenient_correct": true,
+        "note": "informal; payment methods"
+      },
+      {
+        "text": "What's your return policy for opened electronics?",
+        "expected": "REFUND",
+        "acceptable": "",
+        "predicted": "REFUND",
+        "confidence": 0.87,
+        "top3": [
+          [
+            "REFUND",
+            0.87
+          ],
+          [
+            "FEEDBACK",
+            0.04
+          ],
+          [
+            "ACCOUNT",
+            0.022
+          ]
+        ],
+        "strict_correct": true,
+        "lenient_correct": true,
+        "note": "return policy -> check_refund_policy"
+      },
+      {
+        "text": "just wanted to say the support agent was super helpful, thanks!",
+        "expected": "FEEDBACK",
+        "acceptable": "",
+        "predicted": "CONTACT",
+        "confidence": 0.946,
+        "top3": [
+          [
+            "CONTACT",
+            0.946
+          ],
+          [
+            "ACCOUNT",
+            0.01
+          ],
+          [
+            "PAYMENT",
+            0.008
+          ]
+        ],
+        "strict_correct": false,
+        "lenient_correct": false,
+        "note": "positive review"
+      },
+      {
+        "text": "need to delete my acount and all my data",
+        "expected": "ACCOUNT",
+        "acceptable": "",
+        "predicted": "ACCOUNT",
+        "confidence": 0.993,
+        "top3": [
+          [
+            "ACCOUNT",
+            0.993
+          ],
+          [
+            "REFUND",
+            0.001
+          ],
+          [
+            "INVOICE",
+            0.001
+          ]
+        ],
+        "strict_correct": true,
+        "lenient_correct": true,
+        "note": "typo; delete_account"
+      },
+      {
+        "text": "my card got declined at checkout but the money still left my bank account",
+        "expected": "PAYMENT",
+        "acceptable": "REFUND",
+        "predicted": "ACCOUNT",
+        "confidence": 0.746,
+        "top3": [
+          [
+            "ACCOUNT",
+            0.746
+          ],
+          [
+            "REFUND",
+            0.154
+          ],
+          [
+            "INVOICE",
+            0.039
+          ]
+        ],
+        "strict_correct": false,
+        "lenient_correct": false,
+        "note": "ambiguous: payment issue with money taken"
+      },
+      {
+        "text": "how do I cancel order 55102, I dont need it anymore",
+        "expected": "ORDER",
+        "acceptable": "CANCEL",
+        "predicted": "ORDER",
+        "confidence": 0.975,
+        "top3": [
+          [
+            "ORDER",
+            0.975
+          ],
+          [
+            "DELIVERY",
+            0.007
+          ],
+          [
+            "ACCOUNT",
+            0.005
+          ]
+        ],
+        "strict_correct": true,
+        "lenient_correct": true,
+        "note": "cancel_order is ORDER in Bitext; CANCEL is only the cancellation-fee intent"
+      },
+      {
+        "text": "whats ur phone number?? need to call someone about my stuff",
+        "expected": "CONTACT",
+        "acceptable": "",
+        "predicted": "CONTACT",
+        "confidence": 0.883,
+        "top3": [
+          [
+            "CONTACT",
+            0.883
+          ],
+          [
+            "ACCOUNT",
+            0.051
+          ],
+          [
+            "FEEDBACK",
+            0.013
+          ]
+        ],
+        "strict_correct": true,
+        "lenient_correct": true,
+        "note": "vague informal"
+      },
+      {
+        "text": "I never received my package and I want my money back",
+        "expected": "REFUND",
+        "acceptable": "ORDER|DELIVERY",
+        "predicted": "REFUND",
+        "confidence": 0.965,
+        "top3": [
+          [
+            "REFUND",
+            0.965
+          ],
+          [
+            "ACCOUNT",
+            0.011
+          ],
+          [
+            "DELIVERY",
+            0.007
+          ]
+        ],
+        "strict_correct": true,
+        "lenient_correct": true,
+        "note": "ambiguous: missing delivery plus refund request"
+      }
+    ]
+  },
+  "random_split_diagnostic": {
+    "label": "DIAGNOSTIC ONLY - random stratified split on raw rows; duplicates/near-duplicates leak across train/test, so this is potentially optimistic. Not the headline result.",
+    "n": 5375,
+    "accuracy": 0.9994,
+    "macro_f1": 0.9995,
+    "weighted_f1": 0.9994,
+    "test_rows_with_exact_text_in_train": 0.1124
+  }
+}

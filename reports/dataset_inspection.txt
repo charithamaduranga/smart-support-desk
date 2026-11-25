@@ -1,0 +1,136 @@
+=== SHAPE / COLUMNS ===
+(26872, 5)
+flags          str
+instruction    str
+category       str
+intent         str
+response       str
+dtype: object
+  flags                                                 instruction category        intent                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   response
+0     B            question about cancelling order {{Order Number}}    ORDER  cancel_order                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       I've understood you have a question regarding canceling order {{Order Number}}, and I'm here to provide you with the information you need. Please go ahead and ask your question, and I'll do my best to assist you.
+1   BQZ  i have a question about cancelling oorder {{Order Number}}    ORDER  cancel_order                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    I've been informed that you have a question about canceling order {{Order Number}}. I'm here to assist you! Please go ahead and let me know what specific question you have, and I'll provide you with all the information and guidance you need. Your satisfaction is my top priority.
+2  BLQZ             i need help cancelling puchase {{Order Number}}    ORDER  cancel_order  I can sense that you're seeking assistance with canceling your purchase with the purchase number {{Order Number}}. I apologize for any inconvenience caused, and I'm here to guide you through the process.\n\nTo cancel your purchase, please follow these steps:\n\n1. Log into your account: Visit our {{Online Company Portal Info}} and sign in using your credentials.\n2. Locate your order: Once logged in, navigate to the '{{Online Order Interaction}}' or '{{Online Order Interaction}}' section to find the purchase with the order number {{Order Number}}.\n3. Initiate the cancellation: Upon finding your purchase, look for the option labeled '{{Online Order Interaction}}' and click on it to initiate the cancellation process.\n4. Confirm the cancellation: Our system might ask for confirmation or feedback regarding the cancellation. Kindly provide the necessary information to complete the process.\n5. Seek additional support: If you encounter any difficulties or require further assistance, our dedicated customer support team is available during {{Customer Support Hours}}. You can contact us at {{Customer Support Phone Number}} or use the Live Chat feature on our {{Website URL}}.\n\nWe appreciate your understanding and value your satisfaction. Should you have any more questions or concerns, feel free to reach out to us. We're here to help you.
+
+=== MISSING VALUES (NaN or empty/whitespace) ===
+flags        missing/blank=0
+instruction  missing/blank=0
+category     missing/blank=0
+intent       missing/blank=0
+response     missing/blank=0
+
+=== CATEGORY DISTRIBUTION ===
+                 n    pct
+category                 
+ACCOUNT       5986  22.28
+ORDER         3988  14.84
+REFUND        2992  11.13
+INVOICE       1999   7.44
+CONTACT       1999   7.44
+PAYMENT       1998   7.44
+FEEDBACK      1997   7.43
+DELIVERY      1994   7.42
+SHIPPING      1970   7.33
+SUBSCRIPTION   999   3.72
+CANCEL         950   3.54
+n categories: 11  max/min ratio: 6.3
+
+=== INTENTS PER CATEGORY ===
+ACCOUNT        ['create_account', 'delete_account', 'edit_account', 'recover_password', 'registration_problems', 'switch_account']
+CANCEL         ['check_cancellation_fee']
+CONTACT        ['contact_customer_service', 'contact_human_agent']
+DELIVERY       ['delivery_options', 'delivery_period']
+FEEDBACK       ['complaint', 'review']
+INVOICE        ['check_invoice', 'get_invoice']
+ORDER          ['cancel_order', 'change_order', 'place_order', 'track_order']
+PAYMENT        ['check_payment_methods', 'payment_issue']
+REFUND         ['check_refund_policy', 'get_refund', 'track_refund']
+SHIPPING       ['change_shipping_address', 'set_up_shipping_address']
+SUBSCRIPTION   ['newsletter_subscription']
+n intents: 27
+intents mapping to >1 category: []
+
+=== FLAGS (Bitext linguistic-variation tags) ===
+{'B': 26872, 'L': 24115, 'Q': 8968, 'I': 7839, 'Z': 5286, 'M': 4920, 'C': 2646, 'K': 2227, 'E': 1882, 'P': 1329, 'W': 1288, 'N': 463, 'S': 417, 'V': 77}
+distinct flag strings: 394
+
+=== INSTRUCTION LENGTH (words) ===
+{'count': 26872.0, 'mean': 8.7, 'std': 2.6, 'min': 1.0, '25%': 7.0, '50%': 9.0, '75%': 11.0, 'max': 16.0}
+placeholder rows ({{...}}): 6670
+top placeholders: [('{{Order Number}}', 2907), ('{{Account Type}}', 1011), ('{{Person Name}}', 887), ('{{Account Category}}', 822), ('{{Refund Amount}}', 624), ('{{Currency Symbol}}', 372), ('{{Delivery City}}', 234), ('{{Delivery Country}}', 177)]
+
+=== EXACT DUPLICATES ===
+full-row duplicates: 0
+instruction duplicates (extra copies): 2237
+instruction+category duplicates: 2237
+instruction+intent duplicates: 2237
+normalized-instruction duplicates (extra copies): 3046
+unique normalized instructions: 23826
+
+=== SAME TEXT, DIFFERENT LABEL ===
+[instruction] texts with >1 category: 0 (rows 0); with >1 intent: 0 (rows 0)
+[norm] texts with >1 category: 0 (rows 0); with >1 intent: 0 (rows 0)
+
+=== NEAR DUPLICATES (TF-IDF word 1-2gram cosine on normalized text, nearest neighbour) ===
+unique texts with a neighbour at cos>=0.7: 16776 (70.4%)
+unique texts with a neighbour at cos>=0.8: 10985 (46.1%)
+unique texts with a neighbour at cos>=0.9: 4310 (18.1%)
+unique texts with a neighbour at cos>=0.95: 1322 (5.5%)
+unique texts with a neighbour at cos>=0.99: 430 (1.8%)
+nn similarity quantiles: [0.551 0.674 0.786 0.878 0.927]
+nearest neighbour has same category: 98.53%  same intent: 97.27%
+  among pairs cos>=0.8: different category 38 / 10985, different intent 52 / 10985
+  among pairs cos>=0.9: different category 0 / 4310, different intent 0 / 4310
+  among pairs cos>=0.95: different category 0 / 1322, different intent 0 / 1322
+
+Examples: high-similarity neighbours with DIFFERENT category:
+  0.875 | [ACCOUNT/registration_problems] 'is it possible to notify of an error with signup?'
+        | [PAYMENT/payment_issue] 'is it possible to notify of an error with payment'
+  0.853 | [ACCOUNT/registration_problems] 'where could I inform of issues with a signup?'
+        | [PAYMENT/payment_issue] 'where could I inform of issues with payment?'
+  0.850 | [PAYMENT/payment_issue] 'i do not know what to do to inform of problems with payments'
+        | [ACCOUNT/registration_problems] 'I do not know what to do to inform of problems with signup'
+  0.847 | [PAYMENT/payment_issue] 'is it possible to notify of errors with payments?'
+        | [ACCOUNT/registration_problems] 'is it possible to notify of errors with a signup?'
+  0.847 | [ACCOUNT/registration_problems] 'is it possible to notify of errors with a signup?'
+        | [PAYMENT/payment_issue] 'is it possible to notify of errors with payments?'
+  0.845 | [PAYMENT/payment_issue] 'how could I inform of errors with payment?'
+        | [ACCOUNT/registration_problems] 'how could I inform of errors with a signup?'
+  0.845 | [ACCOUNT/registration_problems] 'how could I inform of errors with a signup?'
+        | [PAYMENT/payment_issue] 'how could I inform of errors with payment?'
+  0.842 | [PAYMENT/payment_issue] 'how can i inform of an error with payment'
+        | [ACCOUNT/registration_problems] 'how can I inform of an error with a signup?'
+  0.840 | [ACCOUNT/registration_problems] 'I do not know what to do to report an error with sign-up'
+        | [PAYMENT/payment_issue] 'I do not know what to do to report an error with payment'
+  0.838 | [ACCOUNT/registration_problems] 'i need help notifying of a problem with a signup'
+        | [PAYMENT/payment_issue] 'I need help notifying of a problem with payment'
+  0.838 | [PAYMENT/payment_issue] 'I need help notifying of a problem with payment'
+        | [ACCOUNT/registration_problems] 'i need help notifying of a problem with a signup'
+  0.829 | [PAYMENT/payment_issue] 'I want assistance notifying of issues with payment'
+        | [ACCOUNT/registration_problems] 'want assistance notifying of issues with a registration'
+
+Examples: high-similarity neighbours, same intent (template paraphrases):
+  0.910 | 'i have to write a comment for a service how can i do it'
+        | 'I have to write a comment for a service , how to do it?'
+  0.934 | 'I need to see when will my product arrive'
+        | 'assistance to see when will my product arrive'
+  0.910 | "I'm waiting for a compensation of {{Refund Amount}} dollars"
+        | 'I am waiting for a compensation of {{Refund Amount}} dollars'
+  0.965 | 'assistance seeing ur accepted payment modalities'
+        | 'need assistance seeing ur accepted payment modalities'
+  0.959 | 'I need help updating my shipping address'
+        | 'help updating my shipping address'
+  0.903 | 'i try to make a claim against ur organization'
+        | 'need to make a claim against ur organization'
+
+=== NEAR-DUPLICATE GROUPS (connected components at cos >= 0.90) ===
+groups: 21192  singleton groups: 19516  largest group sizes: [20, 16, 12, 12, 12, 11, 9, 9]
+groups spanning >1 category: 0  rows in them: 0
+
+=== LEAKAGE: fraction of TEST rows whose text has a cos>=0.9 neighbour / exact normalized match in TRAIN ===
+random stratified (row-level)    test= 5375 exact-norm-in-train= 14.5%  nn>=0.9= 27.5%  nn>=0.8= 50.4%  median nn=0.802
+dedup(norm) + random stratified  test= 4766 exact-norm-in-train=  0.0%  nn>=0.9= 15.3%  nn>=0.8= 41.0%  median nn=0.768
+dedup + StratifiedGroupKFold     test= 4765 exact-norm-in-train=  0.0%  nn>=0.9=  0.0%  nn>=0.8= 34.5%  median nn=0.753
+group split category share (test %):
+{'ACCOUNT': 21.3, 'ORDER': 12.65, 'REFUND': 10.75, 'FEEDBACK': 8.35, 'PAYMENT': 8.31, 'SHIPPING': 8.18, 'CONTACT': 8.16, 'INVOICE': 7.49, 'DELIVERY': 6.78, 'SUBSCRIPTION': 4.11, 'CANCEL': 3.9}
+overall category share (%):
+{'ACCOUNT': 22.28, 'ORDER': 14.84, 'REFUND': 11.13, 'INVOICE': 7.44, 'CONTACT': 7.44, 'PAYMENT': 7.44, 'FEEDBACK': 7.43, 'DELIVERY': 7.42, 'SHIPPING': 7.33, 'SUBSCRIPTION': 3.72, 'CANCEL': 3.54}

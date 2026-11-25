@@ -1,0 +1,21 @@
+text,expected,acceptable,note
+"hey my order #48213 still hasnt shipped, its been 9 days?? whats going on",ORDER,DELIVERY,ambiguous: order status vs delivery time; Bitext labels 'where is my order' as track_order (ORDER)
+I was charged twice for the same purchase on my visa. Please fix this asap,PAYMENT,REFUND,ambiguous: payment issue that implies a refund
+"cant log in, forgot my pasword and the reset email never arrives",ACCOUNT,,typos; recover_password
+how much does it cost if i cancel my plan early,CANCEL,,cancellation fee
+"pls stop sending me promo emails, unsubscribe me",SUBSCRIPTION,,informal; newsletter
+I moved last week and need to update the address for future deliveries,SHIPPING,ACCOUNT,ambiguous: shipping address vs account details
+Your courier left my parcel in the rain and the box was soaked. Terrible service.,FEEDBACK,DELIVERY,complaint mentioning delivery
+can i get a copy of the invoice for order 99120? need it for my expense report,INVOICE,,real number instead of placeholder
+do you guys ship to Canada and how long does it usually take,DELIVERY,,delivery options/period
+"i returned the shoes 2 weeks ago, where is my money",REFUND,,track_refund without the word refund
+I want to talk to a real person not a bot,CONTACT,,human agent
+"accidentally ordered the wrong size, can I swap it before it ships?",ORDER,,change_order phrased as swap
+do u take paypal or apple pay,PAYMENT,,informal; payment methods
+What's your return policy for opened electronics?,REFUND,,return policy -> check_refund_policy
+"just wanted to say the support agent was super helpful, thanks!",FEEDBACK,,positive review
+need to delete my acount and all my data,ACCOUNT,,typo; delete_account
+my card got declined at checkout but the money still left my bank account,PAYMENT,REFUND,ambiguous: payment issue with money taken
+"how do I cancel order 55102, I dont need it anymore",ORDER,CANCEL,cancel_order is ORDER in Bitext; CANCEL is only the cancellation-fee intent
+whats ur phone number?? need to call someone about my stuff,CONTACT,,vague informal
+I never received my package and I want my money back,REFUND,ORDER|DELIVERY,ambiguous: missing delivery plus refund request

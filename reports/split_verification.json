@@ -1,0 +1,16 @@
+{
+  "n_categories": 11,
+  "categories_missing_in_train": [],
+  "categories_missing_in_test": [],
+  "min_test_count_per_category": 186,
+  "groups_crossing_boundary": 0,
+  "multi_member_groups": 1676,
+  "members_without_in_group_neighbour_ge_0.9": 0,
+  "singletons_with_any_neighbour_ge_0.9": 0,
+  "groups_spanning_multiple_categories": 0,
+  "group_builder_inputs": "normalised text only (build_groups(norm_texts)); labels used only for fold stratification",
+  "rows_cached": 23826,
+  "rows_fresh": 23826,
+  "group_ids_identical": true,
+  "split_identical": true
+}
