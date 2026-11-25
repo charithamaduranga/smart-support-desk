@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Ticket #{{ ticket.id }} · Smart Support Desk{% endblock %}
+{% block content %}
+<a href="/tickets" class="small">&larr; All tickets</a>
+<h1 class="h3 mt-2 mb-3">Ticket #{{ ticket.id }}</h1>
+<div class="card mb-3">
+  <div class="card-body">
+    <p class="mb-0" style="white-space: pre-wrap">{{ ticket.message }}</p>
+  </div>
+</div>
+<dl class="row">
+  <dt class="col-sm-3">Predicted category</dt>
+  <dd class="col-sm-9"><span class="badge text-bg-secondary">{{ ticket.predicted_category }}</span></dd>
+  <dt class="col-sm-3">Confidence</dt>
+  <dd class="col-sm-9">{{ "%.1f"|format(ticket.confidence * 100) }}%</dd>
+  <dt class="col-sm-3">Created</dt>
+  <dd class="col-sm-9">{{ ticket.created_at.strftime("%Y-%m-%d %H:%M") }} UTC</dd>
+  <dt class="col-sm-3">Model version</dt>
+  <dd class="col-sm-9"><code>{{ ticket.model_version }}</code></dd>
+</dl>
+{% endblock %}

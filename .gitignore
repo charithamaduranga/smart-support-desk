@@ -14,3 +14,9 @@ wheels/
 
 # Trained model artifacts (regenerate with `uv run python -m ml.train`)
 models/*.joblib
+
+# Local SQLite databases
+*.db
+
+# Browser-automation artifacts
+.playwright-mcp/
