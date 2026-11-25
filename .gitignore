@@ -9,8 +9,10 @@ wheels/
 # Virtual environments
 .venv
 
-# Secrets
+# Secrets: .env and any variant (.env.local, .env.production, ...), but keep the template
 .env
+.env.*
+!.env.example
 
 # Trained model artifacts (regenerate with `uv run python -m ml.train`)
 models/*.joblib

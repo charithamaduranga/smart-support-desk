@@ -1,8 +1,9 @@
 {% extends "base.html" %}
+{% block title %}Tickets · Smart Support Desk{% endblock %}
 {% block content %}
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
   <h1 class="h3 mb-0">Tickets</h1>
-  <form method="get" action="/tickets" class="d-flex gap-2">
+  <form method="get" action="/team/tickets" class="d-flex gap-2">
     <select name="category" class="form-select form-select-sm" aria-label="Filter by category">
       <option value="">All categories</option>
       {% for c in categories %}
@@ -16,15 +17,18 @@
 <div class="table-responsive">
   <table class="table table-hover bg-white align-middle">
     <thead>
-      <tr><th>#</th><th>Message</th><th>Predicted category</th><th>Confidence</th><th>Created (UTC)</th></tr>
+      <tr><th>#</th><th>Customer</th><th>Message</th><th>Category</th><th>Priority</th><th>Status</th><th>Created (UTC)</th></tr>
     </thead>
     <tbody>
       {% for t in tickets %}
       <tr>
-        <td><a href="/tickets/{{ t.id }}">{{ t.id }}</a></td>
-        <td><a href="/tickets/{{ t.id }}" class="text-body text-decoration-none">{{ t.message|truncate(90) }}</a></td>
-        <td><span class="badge text-bg-secondary">{{ t.predicted_category }}</span></td>
-        <td>{{ "%.1f"|format(t.confidence * 100) }}%</td>
+        <td><a href="/team/tickets/{{ t.id }}">{{ t.id }}</a></td>
+        <td>{{ t.name }}</td>
+        <td><a href="/team/tickets/{{ t.id }}" class="text-body text-decoration-none">{{ t.message|truncate(70) }}</a></td>
+        <td><span class="badge text-bg-secondary">{{ t.predicted_category }}</span>
+            <span class="small text-muted">{{ "%.0f"|format(t.confidence * 100) }}%</span></td>
+        <td>{{ t.priority }}</td>
+        <td>{{ t.status.replace("_", " ") }}</td>
         <td class="text-nowrap">{{ t.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
       </tr>
       {% endfor %}
@@ -34,7 +38,6 @@
 {% else %}
 <div class="alert alert-secondary">
   {% if selected %}No tickets in category {{ selected }}.{% else %}No tickets yet.{% endif %}
-  <a href="/tickets/new">Create one</a>.
 </div>
 {% endif %}
 {% endblock %}

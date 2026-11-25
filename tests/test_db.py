@@ -18,7 +18,7 @@ def session_factory(tmp_path):
 
 
 def _ticket(**overrides):
-    fields = {"message": "Where is my refund?", "predicted_category": "REFUND",
+    fields = {"name": "Ana", "email": "ana@example.com", "message": "Where is my refund?", "predicted_category": "REFUND",
               "confidence": 0.87, "model_version": "test"}
     return Ticket(**(fields | overrides))
 
@@ -33,9 +33,11 @@ def test_settings_default_and_env_override(monkeypatch):
 
 def test_init_db_creates_tickets_table(session_factory):
     cols = {c["name"]: c for c in inspect(session_factory.kw["bind"]).get_columns("tickets")}
-    assert set(cols) == {"id", "message", "predicted_category", "confidence", "model_version",
-                         "created_at", "suggested_reply", "reply_error"}
-    assert cols["suggested_reply"]["nullable"] and cols["reply_error"]["nullable"]
+    assert set(cols) == {"id", "name", "email", "message", "priority", "status", "predicted_category",
+                         "confidence", "model_version", "created_at", "suggested_reply", "reply_error",
+                         "reply_status", "reply_sources"}
+    for c in ("suggested_reply", "reply_error", "reply_status", "reply_sources"):
+        assert cols[c]["nullable"]
     assert not cols["message"]["nullable"] and not cols["confidence"]["nullable"]
 
 
@@ -47,6 +49,7 @@ def test_ticket_roundtrip_defaults(session_factory):
         t = s.scalars(select(Ticket)).one()
     assert (t.message, t.predicted_category, t.confidence) == ("Where is my refund?", "REFUND", 0.87)
     assert t.suggested_reply is None and t.reply_error is None
+    assert (t.priority, t.status) == ("normal", "open")
     assert t.created_at is not None
 
 
@@ -77,7 +80,7 @@ def test_naive_datetime_is_rejected(session_factory):
             s.commit()
 
 
-@pytest.mark.parametrize("missing", ["message", "predicted_category", "confidence", "model_version"])
+@pytest.mark.parametrize("missing", ["name", "email", "message", "predicted_category", "confidence", "model_version"])
 def test_required_columns_enforced(session_factory, missing):
     with session_factory() as s:
         s.add(_ticket(**{missing: None}))

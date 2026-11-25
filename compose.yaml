@@ -1,0 +1,18 @@
+# docker compose up --build
+# Values come from your shell or the .env file next to this file (read at runtime, never baked into the image).
+services:
+  app:
+    build: .
+    ports:
+      - "${APP_PORT:-8000}:8000"  # set APP_PORT if 8000 is taken on your machine
+    environment:
+      TEAM_USERNAME: ${TEAM_USERNAME:-team}
+      TEAM_PASSWORD: ${TEAM_PASSWORD:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-}
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-}
+    volumes:
+      - app-data:/data
+
+volumes:
+  app-data:

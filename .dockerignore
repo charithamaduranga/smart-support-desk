@@ -1,0 +1,17 @@
+# Secrets and local state
+.env
+.env.*
+*.db
+
+# Not needed in the image
+.git
+.venv
+**/__pycache__
+.pytest_cache
+.playwright-mcp
+models/*.joblib
+tests
+scripts
+reports
+NOTES.md
+*.pdf

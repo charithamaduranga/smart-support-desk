@@ -1,25 +1,32 @@
-"""FastAPI application: server-rendered support ticket desk.
+"""FastAPI application: public customer form, login-protected team pages, REST API.
 
-Run: uv run uvicorn app.main:app --reload
+Run: uv run python -m app
 """
+import secrets
 from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import APIRouter, Depends, FastAPI, Form, HTTPException, Request
 from fastapi.responses import RedirectResponse
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.templating import Jinja2Templates
-from sqlalchemy import select, text
+from pydantic import ValidationError
+from sqlalchemy import text
 from sqlalchemy.orm import Session
 
+from app import services
 from app.classifier import TicketClassifier
 from app.config import Settings
 from app.db import init_db, make_engine, make_session_factory
-from app.models import Ticket
+from app.models import PRIORITIES, STATUSES, Ticket
+from app.services import MAX_MESSAGE_LENGTH, TicketCreate, TicketOut, TicketReceipt, TicketUpdate
 
-MAX_MESSAGE_LENGTH = 5000
 templates = Jinja2Templates(directory=Path(__file__).resolve().parent / "templates")
-router = APIRouter()
+_basic = HTTPBasic()
+_UNSET = object()
 
+
+# --- dependencies ------------------------------------------------------------
 
 def get_db(request: Request):
     with request.app.state.session_factory() as session:
@@ -30,90 +37,161 @@ def get_classifier(request: Request) -> TicketClassifier:
     return request.app.state.classifier
 
 
-def create_app(settings: Settings | None = None, classifier: TicketClassifier | None = None) -> FastAPI:
-    """Build the app. Tests pass their own settings (temp DB) and/or classifier."""
+def get_drafter(request: Request):
+    return request.app.state.drafter
+
+
+def require_team(request: Request, credentials: HTTPBasicCredentials = Depends(_basic)) -> str:
+    settings: Settings = request.app.state.settings
+    if not settings.team_password:
+        raise HTTPException(503, "Team login is not configured: set TEAM_PASSWORD")
+    user_ok = secrets.compare_digest(credentials.username.encode(), settings.team_username.encode())
+    pass_ok = secrets.compare_digest(credentials.password.encode(), settings.team_password.encode())
+    if not (user_ok and pass_ok):
+        raise HTTPException(401, "Invalid username or password", headers={"WWW-Authenticate": "Basic"})
+    return credentials.username
+
+
+def _get_ticket(db: Session, ticket_id: int) -> Ticket:
+    ticket = db.get(Ticket, ticket_id)
+    if ticket is None:
+        raise HTTPException(404, "Ticket not found")
+    return ticket
+
+
+# --- app factory -------------------------------------------------------------
+
+def create_app(settings: Settings | None = None, classifier: TicketClassifier | None = None,
+               drafter=_UNSET) -> FastAPI:
+    """Tests pass their own settings (temp DB), classifier and drafter (fake or None)."""
     settings = settings or Settings.from_env()
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
         engine = make_engine(settings.database_url)
         init_db(engine)
+        app.state.settings = settings
         app.state.session_factory = make_session_factory(engine)
         # Loaded once per process and shared by all requests; fails fast if untrained.
         app.state.classifier = classifier or TicketClassifier.from_disk(settings.model_path)
+        if drafter is _UNSET:
+            from app.replies import build_drafter  # noqa: PLC0415  (optional feature, built from settings)
+            app.state.drafter = build_drafter(settings)
+        else:
+            app.state.drafter = drafter
         yield
         engine.dispose()
 
     app = FastAPI(title="Smart Support Desk", lifespan=lifespan)
-    app.include_router(router)
+    app.include_router(public)
+    app.include_router(team)
+    app.include_router(api_public)
+    app.include_router(api_team)
     return app
 
 
-@router.get("/", include_in_schema=False)
-def index():
-    return RedirectResponse("/tickets", status_code=303)
+# --- public: customer page ---------------------------------------------------
+
+public = APIRouter()
 
 
-@router.get("/tickets")
-def list_tickets(request: Request, category: str = "", db: Session = Depends(get_db)):
-    query = select(Ticket).order_by(Ticket.created_at.desc(), Ticket.id.desc())
-    if category:
-        query = query.where(Ticket.predicted_category == category)
-    # Filter options come from stored tickets, so the page has no hard-coded label list.
-    categories = db.scalars(select(Ticket.predicted_category).distinct().order_by(Ticket.predicted_category)).all()
+def _submit_form(request: Request, values: dict | None = None, errors: dict | None = None, status_code=200):
     return templates.TemplateResponse(
-        request, "tickets_list.html",
-        {"tickets": db.scalars(query).all(), "categories": categories, "selected": category},
-    )
+        request, "submit.html",
+        {"values": values or {}, "errors": errors or {}, "max_length": MAX_MESSAGE_LENGTH},
+        status_code=status_code)
 
 
-@router.get("/tickets/new")
-def new_ticket_form(request: Request):
-    return _form(request)
+@public.get("/")
+def submit_page(request: Request):
+    return _submit_form(request)
 
 
-@router.post("/tickets")
-def create_ticket(
-    request: Request,
-    message: str = Form(""),
-    db: Session = Depends(get_db),
-    clf: TicketClassifier = Depends(get_classifier),
-):
-    message = message.strip()
-    if not message:
-        return _form(request, message, "Please describe your issue.", status_code=400)
-    if len(message) > MAX_MESSAGE_LENGTH:
-        return _form(request, message, f"Message is too long (max {MAX_MESSAGE_LENGTH} characters).",
-                     status_code=400)
-    prediction = clf.classify(message)
-    ticket = Ticket(message=message, predicted_category=prediction.category,
-                    confidence=prediction.confidence, model_version=prediction.model_version)
-    db.add(ticket)
-    db.commit()
-    # Post/Redirect/Get: refreshing the detail page cannot resubmit the form.
-    return RedirectResponse(f"/tickets/{ticket.id}", status_code=303)
+@public.post("/")
+def submit(request: Request, name: str = Form(""), email: str = Form(""), message: str = Form(""),
+           db: Session = Depends(get_db), clf=Depends(get_classifier), drafter=Depends(get_drafter)):
+    values = {"name": name, "email": email, "message": message}
+    try:
+        data = TicketCreate(**values)
+    except ValidationError as exc:
+        return _submit_form(request, values, services.error_messages(exc), status_code=400)
+    ticket = services.create_ticket(db, clf, data, drafter)
+    # Post/Redirect/Get: refreshing the confirmation page must not resubmit the form.
+    return RedirectResponse(f"/submitted/{ticket.id}", status_code=303)
 
 
-@router.get("/tickets/{ticket_id}")
-def ticket_detail(request: Request, ticket_id: int, db: Session = Depends(get_db)):
-    ticket = db.get(Ticket, ticket_id)
-    if ticket is None:
-        raise HTTPException(status_code=404, detail="Ticket not found")
-    return templates.TemplateResponse(request, "ticket_detail.html", {"ticket": ticket})
+@public.get("/submitted/{ticket_id}")
+def submitted(request: Request, ticket_id: int, db: Session = Depends(get_db)):
+    _get_ticket(db, ticket_id)  # 404 for unknown ids; shows nothing but the ticket number
+    return templates.TemplateResponse(request, "submitted.html", {"ticket_id": ticket_id})
 
 
-def _form(request: Request, message: str = "", error: str | None = None, status_code: int = 200):
-    return templates.TemplateResponse(
-        request, "ticket_new.html",
-        {"message": message, "error": error, "max_length": MAX_MESSAGE_LENGTH},
-        status_code=status_code,
-    )
-
-
-@router.get("/health")
-def health(clf: TicketClassifier = Depends(get_classifier), db: Session = Depends(get_db)):
+@public.get("/health")
+def health(clf=Depends(get_classifier), drafter=Depends(get_drafter), db: Session = Depends(get_db)):
     db.execute(text("SELECT 1"))  # proves the database is reachable
-    return {"status": "ok", "model_version": clf.model_version}
+    return {"status": "ok", "model_version": clf.model_version, "reply_drafts": drafter is not None}
+
+
+# --- team pages (login required) ---------------------------------------------
+
+team = APIRouter(prefix="/team", dependencies=[Depends(require_team)])
+
+
+@team.get("/tickets")
+def team_list(request: Request, category: str = "", db: Session = Depends(get_db)):
+    return templates.TemplateResponse(request, "team_list.html", {
+        "tickets": services.list_tickets(db, category),
+        "categories": services.stored_categories(db), "selected": category})
+
+
+def _detail(request: Request, ticket: Ticket, error: str | None = None, status_code=200):
+    return templates.TemplateResponse(request, "team_detail.html", {
+        "ticket": ticket, "sources": TicketOut.model_validate(ticket).reply_sources,
+        "statuses": STATUSES, "priorities": PRIORITIES, "error": error}, status_code=status_code)
+
+
+@team.get("/tickets/{ticket_id}")
+def team_detail(request: Request, ticket_id: int, db: Session = Depends(get_db)):
+    return _detail(request, _get_ticket(db, ticket_id))
+
+
+@team.post("/tickets/{ticket_id}")
+def team_update(request: Request, ticket_id: int, status: str = Form(...), priority: str = Form(...),
+                db: Session = Depends(get_db)):
+    ticket = _get_ticket(db, ticket_id)
+    try:
+        update = TicketUpdate(status=status, priority=priority)
+    except ValidationError as exc:
+        return _detail(request, ticket, "; ".join(services.error_messages(exc).values()), status_code=400)
+    services.update_ticket(db, ticket, update)
+    return RedirectResponse(f"/team/tickets/{ticket_id}", status_code=303)
+
+
+# --- REST API ----------------------------------------------------------------
+
+api_public = APIRouter(prefix="/api", tags=["api"])
+api_team = APIRouter(prefix="/api", tags=["api"], dependencies=[Depends(require_team)])
+
+
+@api_public.post("/tickets", status_code=201, response_model=TicketReceipt)
+def api_create(data: TicketCreate, db: Session = Depends(get_db), clf=Depends(get_classifier),
+               drafter=Depends(get_drafter)):
+    return services.create_ticket(db, clf, data, drafter)
+
+
+@api_team.get("/tickets", response_model=list[TicketOut])
+def api_list(category: str = "", db: Session = Depends(get_db)):
+    return services.list_tickets(db, category)
+
+
+@api_team.get("/tickets/{ticket_id}", response_model=TicketOut)
+def api_get(ticket_id: int, db: Session = Depends(get_db)):
+    return _get_ticket(db, ticket_id)
+
+
+@api_team.patch("/tickets/{ticket_id}", response_model=TicketOut)
+def api_update(ticket_id: int, update: TicketUpdate, db: Session = Depends(get_db)):
+    return services.update_ticket(db, _get_ticket(db, ticket_id), update)
 
 
 app = create_app()  # for uvicorn; nothing is loaded until the lifespan starts

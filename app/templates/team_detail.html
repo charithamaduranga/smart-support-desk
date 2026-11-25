@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Ticket #{{ ticket.id }} · Smart Support Desk{% endblock %}
+{% block content %}
+<a href="/team/tickets" class="small">&larr; All tickets</a>
+<h1 class="h3 mt-2 mb-3">Ticket #{{ ticket.id }}</h1>
+{% if error %}<div class="alert alert-danger" role="alert">{{ error }}</div>{% endif %}
+<div class="row g-3">
+  <div class="col-lg-8">
+    <div class="card mb-3">
+      <div class="card-header">{{ ticket.name }} &lt;{{ ticket.email }}&gt;</div>
+      <div class="card-body"><p class="mb-0" style="white-space: pre-wrap">{{ ticket.message }}</p></div>
+    </div>
+    <div class="card">
+      <div class="card-header">Suggested reply (AI draft, review before sending)</div>
+      <div class="card-body">
+        {% if ticket.reply_status in ("generated", "no_match") %}
+          <p style="white-space: pre-wrap">{{ ticket.suggested_reply }}</p>
+          {% if sources %}
+            <div class="small text-muted">Based on FAQ entries:
+              <ul class="mb-0">{% for s in sources %}<li><code>{{ s.id }}</code> {{ s.question }} <span class="text-muted">(match {{ "%.2f"|format(s.score) }})</span></li>{% endfor %}</ul>
+            </div>
+          {% else %}
+            <div class="small text-muted">No FAQ entry matched this ticket, so no answer was generated.</div>
+          {% endif %}
+        {% elif ticket.reply_status == "error" %}
+          <div class="text-danger">The draft could not be generated: {{ ticket.reply_error }}</div>
+        {% else %}
+          <div class="text-muted">AI reply drafts are disabled (no OpenAI API key configured).</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <dl class="row mb-2">
+      <dt class="col-6">Category</dt>
+      <dd class="col-6"><span class="badge text-bg-secondary">{{ ticket.predicted_category }}</span></dd>
+      <dt class="col-6">Confidence</dt><dd class="col-6">{{ "%.1f"|format(ticket.confidence * 100) }}%</dd>
+      <dt class="col-6">Created</dt><dd class="col-6">{{ ticket.created_at.strftime("%Y-%m-%d %H:%M") }} UTC</dd>
+    </dl>
+    <form method="post" action="/team/tickets/{{ ticket.id }}" class="card card-body">
+      <label class="form-label" for="status">Status</label>
+      <select id="status" name="status" class="form-select mb-2">
+        {% for s in statuses %}<option value="{{ s }}" {% if s == ticket.status %}selected{% endif %}>{{ s.replace("_", " ") }}</option>{% endfor %}
+      </select>
+      <label class="form-label" for="priority">Priority</label>
+      <select id="priority" name="priority" class="form-select mb-3">
+        {% for p in priorities %}<option value="{{ p }}" {% if p == ticket.priority %}selected{% endif %}>{{ p }}</option>{% endfor %}
+      </select>
+      <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

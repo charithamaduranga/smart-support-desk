@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Contact support · Smart Support Desk{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Contact support</h1>
+{% if errors %}
+  <div class="alert alert-danger" role="alert">Please fix the highlighted fields.</div>
+{% endif %}
+<form method="post" action="/" class="card card-body" novalidate>
+  {% for field, label, type in [("name", "Name", "text"), ("email", "Email", "email")] %}
+  <div class="mb-3">
+    <label for="{{ field }}" class="form-label">{{ label }}</label>
+    <input id="{{ field }}" name="{{ field }}" type="{{ type }}" value="{{ values.get(field, '') }}"
+           class="form-control{% if errors.get(field) %} is-invalid{% endif %}">
+    {% if errors.get(field) %}<div class="invalid-feedback">{{ errors[field] }}</div>{% endif %}
+  </div>
+  {% endfor %}
+  <div class="mb-3">
+    <label for="message" class="form-label">How can we help?</label>
+    <textarea id="message" name="message" rows="6" maxlength="{{ max_length }}"
+              class="form-control{% if errors.get('message') %} is-invalid{% endif %}">{{ values.get('message', '') }}</textarea>
+    {% if errors.get('message') %}<div class="invalid-feedback">{{ errors['message'] }}</div>{% endif %}
+  </div>
+  <div><button type="submit" class="btn btn-primary">Send</button></div>
+</form>
+{% endblock %}
